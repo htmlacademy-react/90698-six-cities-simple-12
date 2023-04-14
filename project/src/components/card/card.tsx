@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Offer } from '../../types/offers';
 import { Reviews } from '../../types/reviews';
@@ -6,10 +5,10 @@ import { Reviews } from '../../types/reviews';
 type CardProps = {
   offer: Offer;
   reviews: Reviews;
+  onListItemHover: (listItemName: string | undefined) => void;
 };
 
-function CardScreen({offer, reviews}: CardProps): JSX.Element {
-  const [activeCard, setActiveCard] = useState <number | null>(null);
+function CardScreen({offer, reviews, onListItemHover}: CardProps): JSX.Element {
 
   const navigate = useNavigate();
 
@@ -18,11 +17,19 @@ function CardScreen({offer, reviews}: CardProps): JSX.Element {
     navigate(path);
   };
 
+  const onListItemEnter = () => {
+    onListItemHover(offer.name);
+  };
+
+  const onListItemLeave = () => {
+    onListItemHover(undefined);
+  };
+
   return (
     <article
       className="cities__card place-card"
-      onMouseEnter={() => setActiveCard(offer.id)}
-      onMouseLeave={() => setActiveCard(null)}
+      onMouseEnter={onListItemEnter}
+      onMouseLeave={onListItemLeave}
     >
       {offer.premium && (
         <div className="place-card__mark">

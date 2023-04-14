@@ -1,9 +1,12 @@
-import { Offers } from '../../types/offers';
+import { Offers, Offer } from '../../types/offers';
 import { Reviews } from '../../types/reviews';
 import CardsList from '../../components/cards-list/cardsList';
 import Logo from '../../components/logo/logo';
 import { NavLink } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import { useState } from 'react';
+import { cities } from '../../mocks/cities';
+import Map from '../../components/map/map';
 
 type mainScreenProps = {
   offersCount: number;
@@ -12,6 +15,15 @@ type mainScreenProps = {
  }
 
 function MainScreen({offersCount, offers, reviews}: mainScreenProps): JSX.Element {
+  const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
+    undefined
+  );
+
+  const onListItemHover = (listItemName: string | undefined) => {
+    const currentPoint = offers.find((offer) => offer.name === listItemName);
+    setSelectedPoint(currentPoint);
+  };
+
   return (
     <div className="page page--gray page--main">
       <div style={{display: 'none'}}>
@@ -100,10 +112,16 @@ function MainScreen({offersCount, offers, reviews}: mainScreenProps): JSX.Elemen
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              {<CardsList offers={offers} reviews={reviews} />}
+              {<CardsList offers={offers} reviews={reviews} onListItemHover={onListItemHover} />}
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section className="cities__map map">
+                <Map
+                  city={cities[0]}
+                  offers={offers}
+                  selectedPoint={selectedPoint}
+                />
+              </section>
             </div>
           </div>
         </div>
