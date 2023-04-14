@@ -11,6 +11,8 @@ name: string;
   hostPro: boolean;
   description: string[];
   id: number;
+  lat: number;
+  lng: number;
 };
 
 export type Offers = Offer[];
