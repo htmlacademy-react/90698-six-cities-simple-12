@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Offer, Offers } from '../../types/offers';
+import { Offer } from '../../types/offers';
 import { Reviews } from '../../types/reviews';
 import SendComment from '../../components/send-comment/sendComment';
 import ReviewsList from '../../components/reviews-list/reviewsList';
 import Logo from '../../components/logo/logo';
-import { cities } from '../../mocks/cities';
 import Map from '../../components/map/map';
 import ListOffersNearby from '../../components/list-offers-nearby/listOffersNearby';
+import { useAppSelector } from '../../hooks/redux';
 
 
 type RoomProps = {
-  offers: Offers;
   reviews: Reviews;
 };
 
-function PropertyScreen({ offers, reviews }: RoomProps): JSX.Element {
+function PropertyScreen({ reviews }: RoomProps): JSX.Element {
   const { id } = useParams();
 
   const [place, setPlace] = useState<Offer>();
@@ -23,6 +22,9 @@ function PropertyScreen({ offers, reviews }: RoomProps): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
     undefined
   );
+
+  const offers = useAppSelector((state) => state.offers);
+  const city = useAppSelector((state) => state.currentCity);
 
   const onListItemHover = (listItemName: string | undefined) => {
     const currentPoint = offers.find((offer) => offer.name === listItemName);
@@ -155,7 +157,7 @@ function PropertyScreen({ offers, reviews }: RoomProps): JSX.Element {
             </div>
             <section className="property__map map">
               <Map
-                city={cities[0]}
+                city={city}
                 offers={offers.filter((offer) => offer.name !== place.name)}
                 selectedPoint={selectedPoint}
               />
