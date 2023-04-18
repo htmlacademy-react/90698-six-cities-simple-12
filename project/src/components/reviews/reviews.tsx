@@ -1,7 +1,7 @@
 import { Review as ReviewProps} from '../../types/reviews';
 
-function Review({name, avatar, rating, comment, date}: ReviewProps) {
-  const countRating = () => `${rating * 20}%`;
+function Review({name, avatar, estimation, comment, date}: ReviewProps) {
+  const countRating = () => `${estimation * 20}%`;
 
   return (
     <li className="reviews__item">

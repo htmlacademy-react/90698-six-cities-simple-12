@@ -5,6 +5,7 @@ city: string;
   photo: string[];
   price: number;
   premium: boolean;
+  rating: number;
   bedrooms: number;
   adults: number;
   conveniences: string[];
