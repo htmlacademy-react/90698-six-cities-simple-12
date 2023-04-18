@@ -6,10 +6,6 @@ import { reviews } from './mocks/reviews';
 import { store } from './store';
 import { cities } from './mocks/cities';
 
-/*const Setting = {
-  OffersCount: 4,
-} as const;*/
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );

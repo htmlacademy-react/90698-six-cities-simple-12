@@ -15,6 +15,7 @@ export const offers: Offers = [
     price: 120,
     premium: true,
     bedrooms: 4,
+    rating: 3,
     adults: 4,
     conveniences: [
       'Wi-Fi',
@@ -53,6 +54,7 @@ export const offers: Offers = [
     price: 120,
     premium: true,
     bedrooms: 4,
+    rating: 6,
     adults: 4,
     conveniences: [
       'Wi-Fi',
@@ -91,6 +93,7 @@ export const offers: Offers = [
     price: 80,
     premium: false,
     bedrooms: 4,
+    rating: 1,
     adults: 4,
     conveniences: [
       'Wi-Fi',
@@ -129,6 +132,7 @@ export const offers: Offers = [
     price: 132,
     premium: false,
     bedrooms: 4,
+    rating: 4,
     adults: 4,
     conveniences: [
       'Wi-Fi',
@@ -167,6 +171,7 @@ export const offers: Offers = [
     price: 180,
     premium: true,
     bedrooms: 4,
+    rating: 2,
     adults: 4,
     conveniences: [
       'Wi-Fi',
