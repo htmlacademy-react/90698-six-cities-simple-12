@@ -1,40 +1,37 @@
 import { Offers, Offer } from '../../types/offers';
-import { Reviews } from '../../types/reviews';
 import CardsList from '../../components/cards-list/cardsList';
 import Logo from '../../components/logo/logo';
 import { useState, useEffect } from 'react';
 import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks/redux';
-import { Cities, City } from '../../types/cities';
 import CitiesList from '../../components/citiesList/citiesList';
 import SortingOptions from '../../components/Sorting-options/sortingOptions';
 import { useSortingOffers } from '../../hooks/sorting';
+import { cities } from '../../const';
 
-type mainScreenProps = {
-  cities: Cities;
-  reviews: Reviews;
- }
-
-function MainScreen({cities, reviews}: mainScreenProps): JSX.Element {
+function MainScreen(): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
     undefined
   );
 
   const [currentOffers, setCurrentOffers] = useState<Offers>([]);
-  const [currentCity, setCurrentCity] = useState<City | null>(null);
+  const offers: Offers = useAppSelector((state) => state.offers);
+  const city: string = useAppSelector((state) => state.currentCity);
 
-  const offers = useAppSelector((state) => state.offers);
-  const city = useAppSelector((state) => state.currentCity);
   const currenSorting = useAppSelector((state) => state.sorting);
 
   useEffect(() => {
-    setCurrentOffers(offers.filter((offer) => offer.city === city.title));
-    setCurrentCity(city);
-  }, [offers, city]);
+    getCurrentOffers();
+  }, [city]);
 
-  const onListItemHover = (listItemName: string | undefined) => {
-    const currentPoint = offers.find((offer) => offer.name === listItemName);
-    setSelectedPoint(currentPoint);
+  const onListItemHover = (selectedOfferId: number | undefined) => {
+    const selectedOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === selectedOfferId);
+    setSelectedPoint(selectedOffer);
+  };
+
+  const getCurrentOffers = () => {
+    const cityOffers = offers.filter((offer: Offer) => offer.city.name === city);
+    setCurrentOffers(cityOffers);
   };
 
   return (
@@ -78,21 +75,19 @@ function MainScreen({cities, reviews}: mainScreenProps): JSX.Element {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              {currentCity && (
-                <b className="places__found">
-                  {`${currentOffers.length} ${
-                    currentOffers.length === 1 ? 'place' : 'places'
-                  } to stay in ${currentCity.title}`}
-                </b>
-              )}
+              <b className="places__found">
+                {`${currentOffers.length} ${
+                  currentOffers.length === 1 ? 'place' : 'places'
+                } to stay in ${city}`}
+              </b>
               <SortingOptions currenSorting={currenSorting}/>
-              {<CardsList offers={useSortingOffers(currentOffers, currenSorting)} reviews={reviews} onListItemHover={onListItemHover} />}
+              {<CardsList offers={useSortingOffers(currentOffers, currenSorting)} onListItemHover={onListItemHover} />}
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                {currentCity && (
+                {currentOffers.length >= 1 && (
                   <Map
-                    city={currentCity}
+                    city={currentOffers[0].city}
                     offers={currentOffers}
                     selectedPoint={selectedPoint}
                   />

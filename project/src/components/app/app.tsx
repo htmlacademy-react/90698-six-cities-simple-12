@@ -5,20 +5,26 @@ import LoginScreen from '../../pages/login/login';
 import PropertyScreen from '../../pages/room/room';
 import NotFoundScreen from '../../pages/not_found_screen/not_found_screen';
 import { Reviews } from '../../types/reviews';
-import { Cities } from '../../types/cities';
+import { useAppSelector } from '../../hooks/redux';
+import LoadingScreen from '../../pages/loading/loading';
 
 type AppScreenProps = {
-  cities: Cities;
   reviews: Reviews;
 }
 
-function App({reviews, cities}: AppScreenProps): JSX.Element {
+function App({reviews}: AppScreenProps): JSX.Element {
+  const areOffersLoading = useAppSelector((state) => state.areOffersLoading);
+
+  if (areOffersLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path={AppRoute.Main}
-          element={<MainScreen reviews={reviews} cities={cities} />}
+          element={<MainScreen />}
         />
         <Route
           path={AppRoute.Login}

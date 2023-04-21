@@ -1,18 +1,16 @@
 import { Offers } from '../../types/offers';
-import { Reviews } from '../../types/reviews';
 import CardScreen from '../card/card';
 
 type CardsListProps = {
     offers: Offers;
-    reviews: Reviews;
-    onListItemHover: (listItemName: string | undefined) => void;
+    onListItemHover: (selectedOfferId: number | undefined) => void;
   };
 
-function CardsList({offers, reviews, onListItemHover}: CardsListProps) {
+function CardsList({offers, onListItemHover}: CardsListProps) {
   return (
     <div className="cities__places-list places__list tabs__content">
       {offers.map((offer) => (
-        <CardScreen offer={offer} reviews={reviews} onListItemHover={onListItemHover} key={offer.id} />
+        <CardScreen offer={offer} onListItemHover={onListItemHover} key={offer.id} />
       ))}
     </div>
   );

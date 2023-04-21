@@ -1,24 +1,15 @@
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Offer } from '../../types/offers';
-import { Reviews } from '../../types/reviews';
 
 type CardProps = {
   offer: Offer;
-  reviews: Reviews;
-  onListItemHover: (listItemName: string | undefined) => void;
+  onListItemHover: (selectedOfferId: number | undefined) => void;
 };
 
-function CardScreen({offer, reviews, onListItemHover}: CardProps): JSX.Element {
-
-  const navigate = useNavigate();
-
-  const navigateToRoomPage = () => {
-    const path = `offer/${offer.id}`;
-    navigate(path);
-  };
+function CardScreen({offer, onListItemHover}: CardProps): JSX.Element {
 
   const onListItemEnter = () => {
-    onListItemHover(offer.name);
+    onListItemHover(offer.id);
   };
 
   const onListItemLeave = () => {
@@ -31,13 +22,13 @@ function CardScreen({offer, reviews, onListItemHover}: CardProps): JSX.Element {
       onMouseEnter={onListItemEnter}
       onMouseLeave={onListItemLeave}
     >
-      {offer.premium && (
+      {offer.isPremium && (
         <div className="place-card__mark">
           <span>Premium</span>
         </div>
       )}
       <div className="cities__image-wrapper place-card__image-wrapper">
-        <img className="place-card__image" src={offer.photo[0]} width="260" height="200" alt=" " />
+        <img className="place-card__image" src={offer.images[0]} width="260" height="200" alt={offer.title} />
       </div>
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
@@ -53,9 +44,9 @@ function CardScreen({offer, reviews, onListItemHover}: CardProps): JSX.Element {
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
-        <h2 className="place-card__name" onClick={navigateToRoomPage}>
-          {offer.name}
-        </h2>
+        <Link className="place-card__name" to={`offer/${offer.id}`}>
+          {offer.title}
+        </Link>
         <p className="place-card__type">{offer.type}</p>
       </div>
     </article>

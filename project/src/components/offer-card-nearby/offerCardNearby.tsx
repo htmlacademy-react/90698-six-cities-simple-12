@@ -1,18 +1,16 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { Offer } from '../../types/offers';
-import { Reviews } from '../../types/reviews';
 
 type OfferCardNearbyProps = {
   offer: Offer;
-  reviews: Reviews;
   onListItemHover: (listItemName: string | undefined) => void;
 }
 
-function OfferCardNearby({offer, reviews, onListItemHover}: OfferCardNearbyProps) {
+function OfferCardNearby({offer, onListItemHover}: OfferCardNearbyProps) {
 
   const onListItemEnter = () => {
-    onListItemHover(offer.name);
+    onListItemHover(offer.title);
   };
 
   const onListItemLeave = () => {
@@ -28,7 +26,7 @@ function OfferCardNearby({offer, reviews, onListItemHover}: OfferCardNearbyProps
         <Link to={AppRoute.Main}>
           <img
             className="place-card__image"
-            src="img/room.jpg"
+            src={offer.images[0]}
             width="260"
             height="200"
             alt="Wood and stone place"
@@ -51,7 +49,7 @@ function OfferCardNearby({offer, reviews, onListItemHover}: OfferCardNearbyProps
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${offer.id}`}>{offer.name}</Link>
+          <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
         </h2>
         <p className="place-card__type">{offer.description}</p>
       </div>
