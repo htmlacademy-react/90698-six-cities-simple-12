@@ -1,12 +1,22 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { offers } from '../mocks/offers';
-import { cities } from '../mocks/cities';
-import { changeCity, fillOffers, openSorting, changeSorting } from './action';
+import { changeCity, loadOffers, setOffersLoadingStatus, openSorting, changeSorting } from './action';
 import { SORTING_TYPE } from '../const';
+import { Offers } from '../types/offers';
+import { Sort } from '../types/sorting';
 
-const initialState = {
-  currentCity: cities.filter((city) => city.title === 'Paris')[0],
-  offers,
+type InitialStateProps = {
+  currentCity: string;
+  offers: Offers | [];
+  areOffersLoading: boolean;
+  isOpenSort: boolean;
+  sorting: Sort;
+  }
+
+
+const initialState: InitialStateProps = {
+  currentCity: 'Paris',
+  offers: [],
+  areOffersLoading: false,
   isOpenSort: false,
   sorting: SORTING_TYPE[0],
 };
@@ -14,11 +24,13 @@ const initialState = {
 const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(changeCity, (state, action) => {
-      const {currentCity} = action.payload;
-      state.currentCity = currentCity;
+      state.currentCity = action.payload;
     })
-    .addCase(fillOffers, (state) => {
-      state.offers = offers;
+    .addCase(loadOffers, (state, action) => {
+      state.offers = action.payload;
+    })
+    .addCase(setOffersLoadingStatus, (state, action) => {
+      state.areOffersLoading = action.payload;
     })
     .addCase(openSorting, (state) => {
       state.isOpenSort = !state.isOpenSort;

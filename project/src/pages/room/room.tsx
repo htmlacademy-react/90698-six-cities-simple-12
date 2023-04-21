@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Offer } from '../../types/offers';
+import { Offer, Offers } from '../../types/offers';
 import { Reviews } from '../../types/reviews';
 import SendComment from '../../components/send-comment/sendComment';
 import ReviewsList from '../../components/reviews-list/reviewsList';
@@ -22,20 +22,22 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
     undefined
   );
-
+  const [nearbyPlaces, setNearbyPlaces] = useState<Offers>([]);
   const offers = useAppSelector((state) => state.offers);
-  const city = useAppSelector((state) => state.currentCity);
 
   const onListItemHover = (listItemName: string | undefined) => {
-    const currentPoint = offers.find((offer) => offer.name === listItemName);
-    setSelectedPoint(currentPoint);
+    setSelectedPoint(offers.find((offer: Offer) => offer.title === listItemName));
   };
 
   useEffect(() => {
     const currentPlace = offers.filter((offer) => offer.id === Number(id))[0];
     setPlace(currentPlace);
+
     const currentReviews = reviews.filter((review) => review.id === Number(id));
     setPlaceReviews(currentReviews);
+
+    const nearbyOffers = offers.filter((offer: Offer) => offer.id !== Number(id) && offer.city.name === currentPlace.city.name);
+    setNearbyPlaces(nearbyOffers);
   }, [id, offers, reviews]);
 
   return (
@@ -74,23 +76,23 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
           <section className="property">
             <div className="property__gallery-container container">
               <div className="property__gallery">
-                {place.photo.map((photo) => (
-                  <div className="property__image-wrapper" key={photo}>
-                    <img className="property__image" src={photo} alt="studio" />
+                {place.images.map((image) => (
+                  <div className="property__image-wrapper" key={image}>
+                    <img className="property__image" src={image} alt={place.title} />
                   </div>
                 ))}
               </div>
             </div>
             <div className="property__container container">
               <div className="property__wrapper">
-                {place.premium && (
+                {place.isPremium && (
                   <div className="property__mark">
                     <span>Premium</span>
                   </div>
                 )}
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
-                    {place.name}
+                    {place.title}
                   </h1>
                 </div>
                 <div className="property__rating rating">
@@ -108,7 +110,7 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
                     {place.bedrooms} Bedrooms
                   </li>
                   <li className="property__feature property__feature--adults">
-                  Max {place.adults} adults
+                  Max {place.maxAdults} adults
                   </li>
                 </ul>
                 <div className="property__price">
@@ -118,9 +120,9 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
                 <div className="property__inside">
                   <h2 className="property__inside-title">What&apos;s inside</h2>
                   <ul className="property__inside-list">
-                    {place.conveniences.map((convenience) => (
-                      <li className="property__inside-item" key={convenience}>
-                        {convenience}
+                    {place.goods.map((item) => (
+                      <li className="property__inside-item" key={item}>
+                        {item}
                       </li>
                     ))}
                   </ul>
@@ -128,24 +130,22 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
                 <div className="property__host">
                   <h2 className="property__host-title">Meet the host</h2>
                   <div className="property__host-user user">
-                    <div className={`property__avatar-wrapper ${place.hostPro ? 'property__avatar-wrapper--pro' : ''} user__avatar-wrapper`} >
-                      <img className="property__avatar user__avatar" src="img/avatar-angelina.jpg" width="74" height="74" alt="Host avatar" />
+                    <div className={`property__avatar-wrapper ${place.host.isPro ? 'property__avatar-wrapper--pro' : ''} user__avatar-wrapper`} >
+                      <img className="property__avatar user__avatar" src={place.host.avatarUrl} width="74" height="74" alt={place.host.name} />
                     </div>
                     <span className="property__user-name">
-                      {place.host}
+                      {place.host.name}
                     </span>
-                    {place.hostPro && (
+                    {place.host.isPro && (
                       <span className="property__user-status">
                     Pro
                       </span>
                     )}
                   </div>
                   <div className="property__description">
-                    {place.description.map((paragraph) => (
-                      <p className="property__text" key={paragraph.slice(0, 10)}>
-                        {paragraph}
-                      </p>
-                    ))}
+                    <p className="property__text" key={place.description.slice(0, 10)}>
+                      {place.description}
+                    </p>
                   </div>
                 </div>
                 <section className="property__reviews reviews">
@@ -156,27 +156,30 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
               </div>
             </div>
             <section className="property__map map">
-              <Map
-                city={city}
-                offers={offers.filter((offer) => offer.name !== place.name)}
-                selectedPoint={selectedPoint}
-              />
+              {offers && (
+                <Map
+                  city={offers[0].city}
+                  offers={offers.filter((offer: Offer) => offer.title !== place.title)}
+                  selectedPoint={selectedPoint}
+                />
+              )}
             </section>
           </section>
           <div className="container">
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
-              <ListOffersNearby
-                offers={offers.filter((offer) => offer.name !== place.name)}
-                reviews={reviews}
-                onListItemHover={onListItemHover}
-              />
+              {nearbyPlaces.length &&
+                (
+                  <ListOffersNearby
+                    offers={nearbyPlaces}
+                    onListItemHover={onListItemHover}
+                  />
+                )}
             </section>
           </div>
         </main>
       )}
     </div>
-
   );
 }
 

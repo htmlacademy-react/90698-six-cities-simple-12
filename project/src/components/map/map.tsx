@@ -36,12 +36,12 @@ function Map({ city, offers, selectedPoint }: MapProps): JSX.Element {
         leaflet
           .marker(
             {
-              lat: offer.lat,
-              lng: offer.lng,
+              lat: offer.location.latitude,
+              lng: offer.location.longitude,
             },
             {
               icon:
-                selectedPoint !== undefined && offer.name === selectedPoint.name
+                selectedPoint !== undefined && offer.id === selectedPoint.id
                   ? currentCustomIcon
                   : defaultCustomIcon,
             }
@@ -53,7 +53,7 @@ function Map({ city, offers, selectedPoint }: MapProps): JSX.Element {
 
   useEffect(() => {
     if (map) {
-      map.setView([city.lat, city.lng]);
+      map.setView([city.location.latitude, city.location.longitude]);
     }
   }, [city, map]);
 

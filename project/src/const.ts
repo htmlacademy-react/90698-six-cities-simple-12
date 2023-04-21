@@ -10,3 +10,9 @@ export const SORTING_TYPE = [
   {label: 'Price: high to low'},
   {label: 'Top rated first'}
 ];
+
+export const cities: string[] = ['Paris', 'Cologne', 'Brussels', 'Amsterdam', 'Hamburg', 'Dusseldorf'];
+
+export enum APIRoute {
+  Offers = '/hotels',
+}

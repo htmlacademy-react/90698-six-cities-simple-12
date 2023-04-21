@@ -1,9 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { changeCity } from '../../store/action';
-import { City } from '../../types/cities';
 
 type LocationProps = {
-  city: City;
+  city: string;
 };
 
 function Location({ city }: LocationProps) {
@@ -12,18 +11,18 @@ function Location({ city }: LocationProps) {
   const dispatch = useAppDispatch();
 
   const onCityClick = () => {
-    dispatch(changeCity({ currentCity: city }));
+    dispatch(changeCity(city));
   };
 
   return (
     <li
       className={`locations__item ${
-        currentCity.title === city.title ? 'locations--current' : ''
+        currentCity === city ? 'locations--current' : ''
       }`}
       onClick={onCityClick}
     >
       <div className="locations__item-link tabs__item">
-        <span>{city.title}</span>
+        <span>{city}</span>
       </div>
     </li>
   );
