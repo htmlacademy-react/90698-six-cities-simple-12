@@ -3,11 +3,11 @@ import { AppRoute } from '../../const';
 import MainScreen from '../../pages/main/main';
 import LoginScreen from '../../pages/login/login';
 import PropertyScreen from '../../pages/room/room';
-import NotFoundScreen from '../../pages/not_found_screen/not_found_screen';
+import NotFoundScreen from '../../pages/not-found-screen/notFoundScreen';
 import { Reviews } from '../../types/reviews';
 import { useAppSelector } from '../../hooks/redux';
 import LoadingScreen from '../../pages/loading/loading';
-import HistoryRouter from '../HistoryRouter/HistoryRouter';
+import HistoryRouter from '../history-router/historyRouter';
 import browserHistory from '../../services/browser-history';
 
 type AppScreenProps = {

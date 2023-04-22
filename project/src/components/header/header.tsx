@@ -1,5 +1,5 @@
 import Logo from '../logo/logo';
-import Authorization from '../Autorization/Autorization';
+import Authorization from '../authorization/authorization';
 
 function Header(): JSX.Element {
   return (
