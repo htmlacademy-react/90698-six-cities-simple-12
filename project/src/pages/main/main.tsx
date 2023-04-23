@@ -11,6 +11,7 @@ import Header from '../../components/header/header';
 import { getOffers } from '../../store/offers/selectors';
 import { getCurrentCity } from '../../store/city/selectors';
 import { getSortOptions } from '../../store/offers/selectors';
+import MainEmpty from '../../components/main-empty/mainEmpty';
 
 function MainScreen(): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
@@ -51,31 +52,34 @@ function MainScreen(): JSX.Element {
             <CitiesList cities={cities} />
           </section>
         </div>
-        <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">
-                {`${currentOffers.length} ${
-                  currentOffers.length === 1 ? 'place' : 'places'
-                } to stay in ${city}`}
-              </b>
-              <SortingOptions currenSorting={currenSorting}/>
-              {<CardsList offers={useSortingOffers(currentOffers, currenSorting)} onListItemHover={onListItemHover} />}
-            </section>
-            <div className="cities__right-section">
-              <section className="cities__map map">
-                {currentOffers.length >= 1 && (
-                  <Map
-                    city={currentOffers[0].city}
-                    offers={currentOffers}
-                    selectedPoint={selectedPoint}
-                  />
-                )}
+        {currentOffers.length ? (
+          <div className="cities">
+            <div className="cities__places-container container">
+              <section className="cities__places places">
+                <h2 className="visually-hidden">Places</h2>
+                <b className="places__found">
+                  {`${currentOffers.length} ${
+                    currentOffers.length === 1 ? 'place' : 'places'
+                  } to stay in ${city}`}
+                </b>
+                <SortingOptions currenSorting={currenSorting}/>
+                {<CardsList offers={useSortingOffers(currentOffers, currenSorting)} onListItemHover={onListItemHover} />}
               </section>
+              <div className="cities__right-section">
+                <section className="cities__map map">
+                  {currentOffers.length >= 1 && (
+                    <Map
+                      city={currentOffers[0].city}
+                      offers={currentOffers}
+                      selectedPoint={selectedPoint}
+                    />
+                  )}
+                </section>
+              </div>
             </div>
-          </div>
-        </div>
+          </div>) : (
+          <MainEmpty />
+        )}
       </main>
     </div>
   );
