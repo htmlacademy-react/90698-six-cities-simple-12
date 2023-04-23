@@ -1,16 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { OffersData } from '../../types/state';
-import { fetchOffersAction } from '../asyncActions';
+import { fetchNearbyOffersAction, fetchOffersAction, fetchSingleOfferAction } from '../asyncActions';
 import { SORTING_TYPE } from '../../const';
 import { Sort } from '../../types/sorting';
 
 const initialState: OffersData = {
   offers: [],
-  areOffersLoading: false,
   isOpenSort: false,
   sorting: SORTING_TYPE[0],
   error: false,
+  areOffersLoading: false,
+  singleOffer: undefined,
+  isSingleOfferLoading: false,
+  notFoundSingleOfferError: false,
+  nearbyOffers: [],
+  areNearbyOffersLoading: false,
 };
 
 export const offersData = createSlice({
@@ -40,6 +45,30 @@ export const offersData = createSlice({
       })
       .addCase(fetchOffersAction.rejected, (state) => {
         state.areOffersLoading = false;
+        state.error = true;
+      })
+      .addCase(fetchSingleOfferAction.pending, (state) => {
+        state.isSingleOfferLoading = true;
+        state.notFoundSingleOfferError = false;
+      })
+      .addCase(fetchSingleOfferAction.fulfilled, (state, action) => {
+        state.isSingleOfferLoading = false;
+        state.singleOffer = action.payload;
+      })
+      .addCase(fetchSingleOfferAction.rejected, (state) => {
+        state.isSingleOfferLoading = false;
+        state.notFoundSingleOfferError = true;
+      })
+      .addCase(fetchNearbyOffersAction.pending, (state) => {
+        state.areNearbyOffersLoading = true;
+        state.error = false;
+      })
+      .addCase(fetchNearbyOffersAction.fulfilled, (state, action) => {
+        state.areNearbyOffersLoading = false;
+        state.nearbyOffers = action.payload;
+      })
+      .addCase(fetchNearbyOffersAction.rejected, (state) => {
+        state.areNearbyOffersLoading = false;
         state.error = true;
       });
   },

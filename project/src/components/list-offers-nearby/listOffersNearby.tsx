@@ -2,18 +2,18 @@ import { Offers } from '../../types/offers';
 import OfferCardNearby from '../offer-card-nearby/offerCardNearby';
 
 type ListOffersNearbyProps = {
-  offers: Offers;
+  nearbyOffers: Offers;
   onListItemHover: (listItemName: string | undefined) => void;
 };
 
-function ListOffersNearby ({ offers, onListItemHover }: ListOffersNearbyProps) {
+function ListOffersNearby ({ nearbyOffers, onListItemHover }: ListOffersNearbyProps) {
   return (
     <div className="near-places__list places__list">
-      {offers.map((offer) => (
+      {nearbyOffers.map((nearbyOffer) => (
         <OfferCardNearby
-          offer={offer}
+          nearbyOffer={nearbyOffer}
           onListItemHover={onListItemHover}
-          key={offer.id}
+          key={nearbyOffer.id}
         />
       ))}
     </div>

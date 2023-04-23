@@ -3,14 +3,14 @@ import { AppRoute } from '../../const';
 import { Offer } from '../../types/offers';
 
 type OfferCardNearbyProps = {
-  offer: Offer;
+  nearbyOffer: Offer;
   onListItemHover: (listItemName: string | undefined) => void;
 }
 
-function OfferCardNearby({offer, onListItemHover}: OfferCardNearbyProps) {
+function OfferCardNearby({nearbyOffer, onListItemHover}: OfferCardNearbyProps) {
 
   const onListItemEnter = () => {
-    onListItemHover(offer.title);
+    onListItemHover(nearbyOffer.title);
   };
 
   const onListItemLeave = () => {
@@ -26,7 +26,7 @@ function OfferCardNearby({offer, onListItemHover}: OfferCardNearbyProps) {
         <Link to={AppRoute.Main}>
           <img
             className="place-card__image"
-            src={offer.images[0]}
+            src={nearbyOffer.images[0]}
             width="260"
             height="200"
             alt="Wood and stone place"
@@ -36,7 +36,7 @@ function OfferCardNearby({offer, onListItemHover}: OfferCardNearbyProps) {
       <div className="place-card__info">
         <div className="place-card__price-wrapper">
           <div className="place-card__price">
-            <b className="place-card__price-value">&euro;{offer.price}</b>
+            <b className="place-card__price-value">&euro;{nearbyOffer.price}</b>
             <span className="place-card__price-text">
               &#47;&nbsp;night
             </span>
@@ -49,9 +49,9 @@ function OfferCardNearby({offer, onListItemHover}: OfferCardNearbyProps) {
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={`/offer/${offer.id}`}>{offer.title}</Link>
+          <Link to={`/offer/${nearbyOffer.id}`}>{nearbyOffer.title}</Link>
         </h2>
-        <p className="place-card__type">{offer.description}</p>
+        <p className="place-card__type">{nearbyOffer.description}</p>
       </div>
     </article>
   );

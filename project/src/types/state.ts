@@ -1,8 +1,9 @@
 import {store} from '../store/index';
 import { AuthorizationStatus } from '../const';
-import { Offers } from './offers';
+import { Offers, Offer } from './offers';
 import { UserInfo } from './authorization';
 import { Sort } from './sorting';
+import { Comments } from './comments';
 
 export type UserData = {
     userInfo: Omit<UserInfo, 'token'> | undefined;
@@ -11,11 +12,21 @@ export type UserData = {
 
 export type OffersData = {
     offers: Offers;
+    singleOffer: Offer | undefined;
+    notFoundSingleOfferError: boolean;
+    isSingleOfferLoading: boolean;
+    nearbyOffers: Offers;
+    areNearbyOffersLoading: boolean;
     areOffersLoading: boolean;
     isOpenSort: boolean;
     sorting: Sort;
     error: boolean;
   };
+
+export type CommentsData = {
+    comments: Comments;
+    areCommentsLoading: boolean;
+  }
 
 export type CurrentCityData = {
     currentCity: string;
