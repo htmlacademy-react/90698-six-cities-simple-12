@@ -29,7 +29,7 @@ function SortingOptions({currenSorting}: SortingOptionsProps ): JSX.Element {
           <li
             key={sorting.label}
             className={`places__option ${currenSorting === sorting ? 'places__option--active' : ''}`}
-            tabIndex={id}
+            tabIndex={0}
             onClick={() => dispatch(changeSorting(sorting))}
 
           >

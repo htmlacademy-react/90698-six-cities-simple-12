@@ -1,17 +1,17 @@
 import { Offers, Offer } from '../../types/offers';
-import CardsList from '../../components/cards-list/cardsList';
+import CardsList from '../../components/cards-list/cards-list';
 import { useState, useEffect } from 'react';
 import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks/redux';
-import CitiesList from '../../components/cities-list/citiesList';
-import SortingOptions from '../../components/sorting-options/sortingOptions';
+import CitiesList from '../../components/cities-list/cities-list';
+import SortingOptions from '../../components/sorting-options/sorting-options';
 import { useSortingOffers } from '../../hooks/sorting';
 import { cities } from '../../const';
 import Header from '../../components/header/header';
 import { getOffers } from '../../store/offers/selectors';
 import { getCurrentCity } from '../../store/city/selectors';
 import { getSortOptions } from '../../store/offers/selectors';
-import MainEmpty from '../../components/main-empty/mainEmpty';
+import MainEmpty from '../../components/main-empty/main-empty';
 
 function MainScreen(): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(

@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Offer } from '../../types/offers';
 import Loading from '../loading/loading';
-import NotFoundScreen from '../not-found-screen/notFoundScreen';
+import NotFoundScreen from '../not-found-screen/not-found-screen';
 import { AuthorizationStatus } from '../../const';
-import SendComment from '../../components/send-comment/sendComment';
-import CommentsList from '../../components/comments-list/CommentsList';
+import SendComment from '../../components/send-comment/send-comment';
+import CommentsList from '../../components/comments-list/comments-list';
 import Map from '../../components/map/map';
-import ListOffersNearby from '../../components/list-offers-nearby/listOffersNearby';
+import ListOffersNearby from '../../components/list-offers-nearby/list-offers-nearby';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import Header from '../../components/header/header';
 import { getNearbyOffers, getNearbyOffersLoadingStatus, getSingleOffer, getSingleOfferErrorStatus, getSingleOfferLoadingStatus } from '../../store/offers/selectors';
@@ -18,16 +17,11 @@ import { fetchCommentsAction, fetchNearbyOffersAction, fetchSingleOfferAction } 
 function PropertyScreen(): JSX.Element {
   const { id } = useParams();
 
-  const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>();
   const dispatch = useAppDispatch();
   const offer = useAppSelector(getSingleOffer);
   const nearbyOffers = useAppSelector(getNearbyOffers);
   const comments = useAppSelector(getComments);
   const authorizationStatus = useAppSelector(getAuthorizationStatus);
-
-  const onListItemHover = (listItemName: string | undefined) => {
-    setSelectedPoint(nearbyOffers.find((nearbyOffer: Offer) => nearbyOffer.title === listItemName));
-  };
 
   const isSingleOfferLoading = useAppSelector(getSingleOfferLoadingStatus);
   const areNearbyOffersLoading = useAppSelector(getNearbyOffersLoadingStatus);
@@ -147,7 +141,7 @@ function PropertyScreen(): JSX.Element {
                 <Map
                   city={offer.city}
                   offers={[...nearbyOffers, offer]}
-                  selectedPoint={selectedPoint}
+                  selectedPoint={offer}
                 />
               )}
             </section>
@@ -159,7 +153,6 @@ function PropertyScreen(): JSX.Element {
                 (
                   <ListOffersNearby
                     nearbyOffers={nearbyOffers}
-                    onListItemHover={onListItemHover}
                   />
                 )}
             </section>

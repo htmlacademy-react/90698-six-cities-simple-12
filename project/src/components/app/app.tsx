@@ -3,10 +3,10 @@ import { AppRoute } from '../../const';
 import MainScreen from '../../pages/main/main';
 import LoginScreen from '../../pages/login/login';
 import PropertyScreen from '../../pages/room/room';
-import NotFoundScreen from '../../pages/not-found-screen/notFoundScreen';
+import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import { useAppSelector } from '../../hooks/redux';
 import LoadingScreen from '../../pages/loading/loading';
-import HistoryRouter from '../history-router/historyRouter';
+import HistoryRouter from '../history-router/history-router';
 import browserHistory from '../../services/browser-history';
 import { getOffersLoadingStatus } from '../../store/offers/selectors';
 
