@@ -9,15 +9,15 @@ export type UserData = {
     authorizationStatus: AuthorizationStatus;
   };
 
-  export type OffersData = {
+export type OffersData = {
     offers: Offers;
     areOffersLoading: boolean;
     isOpenSort: boolean;
-    sorting: Sort;    
+    sorting: Sort;
     error: boolean;
   };
 
-  export type CurrentCityData = {
+export type CurrentCityData = {
     currentCity: string;
   };
 

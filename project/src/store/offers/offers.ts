@@ -1,8 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { OffersData } from '../../types/state';
 import { fetchOffersAction } from '../asyncActions';
 import { SORTING_TYPE } from '../../const';
+import { Sort } from '../../types/sorting';
 
 const initialState: OffersData = {
   offers: [],
@@ -19,13 +20,13 @@ export const offersData = createSlice({
     clearError: (state) => {
       state.error = false;
     },
-    changeSorting: (state, action) => {
+    changeSorting: (state, action: PayloadAction<Sort>) => {
       state.sorting = action.payload;
       state.isOpenSort = !state.isOpenSort;
     },
-      openSorting: (state) => {
-        state.isOpenSort = !state.isOpenSort;
-      }
+    openSorting: (state) => {
+      state.isOpenSort = !state.isOpenSort;
+    }
   },
   extraReducers(builder) {
     builder
