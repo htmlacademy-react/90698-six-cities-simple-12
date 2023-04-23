@@ -1,7 +1,10 @@
+import React from 'react';
 import { SORTING_TYPE } from '../../const';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { openSorting, changeSorting } from '../../store/action';
+import { openSorting, changeSorting } from '../../store/offers/offers';
 import { Sort } from '../../types/sorting';
+import { getOpenSort } from '../../store/offers/selectors';
+
 
 type SortingOptionsProps ={
   currenSorting: Sort;
@@ -10,7 +13,7 @@ type SortingOptionsProps ={
 function SortingOptions({currenSorting}: SortingOptionsProps ): JSX.Element {
 
   const dispatch = useAppDispatch();
-  const isOpenSorfing = useAppSelector((state) => state.isOpenSort);
+  const isOpenSorting = useAppSelector(getOpenSort);
 
   return (
     <form className="places__sorting" action="#" method="get">
@@ -21,7 +24,7 @@ function SortingOptions({currenSorting}: SortingOptionsProps ): JSX.Element {
           <use xlinkHref="#icon-arrow-select"></use>
         </svg>
       </span>
-      <ul className={`places__options places__options--custom ${isOpenSorfing ? 'places__options--opened' : ''}`} >
+      <ul className={`places__options places__options--custom ${isOpenSorting ? 'places__options--opened' : ''}`} >
         {SORTING_TYPE.map((sorting, id) => (
           <li
             key={sorting.label}
@@ -38,4 +41,4 @@ function SortingOptions({currenSorting}: SortingOptionsProps ): JSX.Element {
   );
 }
 
-export default SortingOptions;
+export default React.memo(SortingOptions);

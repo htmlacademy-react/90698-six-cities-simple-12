@@ -1,17 +1,15 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import { AuthorizationStatus, AppRoute } from '../../const';
 import { logoutAction } from '../../store/asyncActions';
+import { getAuthorizationStatus, getUser } from '../../store/authorization/selectors';
 
 
 function Authorization() {
-  const authorizationStatus = useAppSelector(
-    (state) => state.authorizationStatus
-  );
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
-  const userInfo = useAppSelector(
-    (state) => state.userInfo
-  );
+  const userInfo = useAppSelector(getUser);
 
   const dispatch = useAppDispatch();
 
@@ -56,4 +54,4 @@ function Authorization() {
   );
 }
 
-export default Authorization;
+export default React.memo(Authorization);

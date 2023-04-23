@@ -1,17 +1,18 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { changeCity } from '../../store/action';
+import { setCurrentCity } from '../../store/city/city';
+import { getCurrentCity } from '../../store/city/selectors';
 
 type LocationProps = {
   city: string;
 };
 
 function Location({ city }: LocationProps) {
-  const currentCity = useAppSelector((state) => state.currentCity);
+  const currentCity: string = useAppSelector(getCurrentCity);
 
   const dispatch = useAppDispatch();
 
   const onCityClick = () => {
-    dispatch(changeCity(city));
+    dispatch(setCurrentCity({currentCity: city}));
   };
 
   return (

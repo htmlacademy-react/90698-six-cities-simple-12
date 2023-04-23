@@ -1,13 +1,15 @@
 import { MouseEvent, useCallback, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { setError } from '../../store/action';
+import { getErrorStatus } from '../../store/offers/selectors';
+import { clearError } from '../../store/offers/offers';
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../const';
 
 function Error(): JSX.Element | null {
-  const error = useAppSelector((state) => state.error);
-
+  const error = useAppSelector(getErrorStatus);
   const dispatch = useAppDispatch();
 
-  const closePopup = () => dispatch(setError(''));
+  const closePopup = () => dispatch(clearError());
 
   const handleOverlayClose = (event:MouseEvent) => {
     if ((event.target as HTMLElement).classList.contains('error')) {
@@ -62,7 +64,7 @@ function Error(): JSX.Element | null {
         </div>
         <div className="error__item error__item_bottom">
           <h1 className="error__title">Ooops! Something went wrong!</h1>
-          <p className="error__text">{error}</p>
+          <Link className="error__text" to={AppRoute.Main}>Please try again</Link>
         </div>
       </div>
     </div>

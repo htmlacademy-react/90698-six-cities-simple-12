@@ -8,7 +8,7 @@ import Map from '../../components/map/map';
 import ListOffersNearby from '../../components/list-offers-nearby/listOffersNearby';
 import { useAppSelector } from '../../hooks/redux';
 import Header from '../../components/header/header';
-
+import { getOffers } from '../../store/offers/selectors';
 
 type RoomProps = {
   reviews: Reviews;
@@ -23,7 +23,7 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
     undefined
   );
   const [nearbyPlaces, setNearbyPlaces] = useState<Offers>([]);
-  const offers = useAppSelector((state) => state.offers);
+  const offers = useAppSelector(getOffers);
 
   const onListItemHover = (listItemName: string | undefined) => {
     setSelectedPoint(offers.find((offer: Offer) => offer.title === listItemName));

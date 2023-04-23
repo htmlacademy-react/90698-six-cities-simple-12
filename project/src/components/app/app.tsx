@@ -9,13 +9,14 @@ import { useAppSelector } from '../../hooks/redux';
 import LoadingScreen from '../../pages/loading/loading';
 import HistoryRouter from '../history-router/historyRouter';
 import browserHistory from '../../services/browser-history';
+import { getOffersLoadingStatus } from '../../store/offers/selectors';
 
 type AppScreenProps = {
   reviews: Reviews;
 }
 
 function App({reviews}: AppScreenProps): JSX.Element {
-  const areOffersLoading = useAppSelector((state) => state.areOffersLoading);
+  const areOffersLoading = useAppSelector(getOffersLoadingStatus);
 
   if (areOffersLoading) {
     return <LoadingScreen />;

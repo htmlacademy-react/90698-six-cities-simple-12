@@ -8,6 +8,9 @@ import SortingOptions from '../../components/sorting-options/sortingOptions';
 import { useSortingOffers } from '../../hooks/sorting';
 import { cities } from '../../const';
 import Header from '../../components/header/header';
+import { getOffers } from '../../store/offers/selectors';
+import { getCurrentCity } from '../../store/city/selectors';
+import { getSortOptions } from '../../store/offers/selectors';
 
 function MainScreen(): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
@@ -15,14 +18,14 @@ function MainScreen(): JSX.Element {
   );
 
   const [currentOffers, setCurrentOffers] = useState<Offers>([]);
-  const offers: Offers = useAppSelector((state) => state.offers);
-  const city: string = useAppSelector((state) => state.currentCity);
+  const offers: Offers = useAppSelector(getOffers);
+  const city: string = useAppSelector(getCurrentCity);
 
-  const currenSorting = useAppSelector((state) => state.sorting);
+  const currenSorting = useAppSelector(getSortOptions);
 
   useEffect(() => {
     getCurrentOffers();
-  }, [city]);
+  }, [city, currenSorting]);
 
   const onListItemHover = (selectedOfferId: number | undefined) => {
     const selectedOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === selectedOfferId);
