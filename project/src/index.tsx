@@ -4,10 +4,11 @@ import { Provider } from 'react-redux';
 import App from './components/app/app';
 import { reviews } from './mocks/reviews';
 import { store } from './store';
-import {fetchOffersAction} from './store/asyncActions';
-import {ToastContainer} from 'react-toastify';
+import {fetchOffersAction, checkAuthAction} from './store/asyncActions';
+import Error from './components/error/error';
 
 store.dispatch(fetchOffersAction());
+store.dispatch(checkAuthAction());
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -16,7 +17,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store = {store}>
-      <ToastContainer />
+      <Error />
       <App reviews={reviews} />
     </Provider>
   </React.StrictMode>,

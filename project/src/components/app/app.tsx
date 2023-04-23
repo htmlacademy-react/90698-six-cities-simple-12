@@ -1,26 +1,29 @@
-import { Route, BrowserRouter, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import MainScreen from '../../pages/main/main';
 import LoginScreen from '../../pages/login/login';
 import PropertyScreen from '../../pages/room/room';
-import NotFoundScreen from '../../pages/not_found_screen/not_found_screen';
+import NotFoundScreen from '../../pages/not-found-screen/notFoundScreen';
 import { Reviews } from '../../types/reviews';
 import { useAppSelector } from '../../hooks/redux';
 import LoadingScreen from '../../pages/loading/loading';
+import HistoryRouter from '../history-router/historyRouter';
+import browserHistory from '../../services/browser-history';
+import { getOffersLoadingStatus } from '../../store/offers/selectors';
 
 type AppScreenProps = {
   reviews: Reviews;
 }
 
 function App({reviews}: AppScreenProps): JSX.Element {
-  const areOffersLoading = useAppSelector((state) => state.areOffersLoading);
+  const areOffersLoading = useAppSelector(getOffersLoadingStatus);
 
   if (areOffersLoading) {
     return <LoadingScreen />;
   }
 
   return (
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
         <Route
           path={AppRoute.Main}
@@ -39,7 +42,7 @@ function App({reviews}: AppScreenProps): JSX.Element {
           element={<NotFoundScreen />}
         />
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
   );
 }
 
