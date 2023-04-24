@@ -4,14 +4,12 @@ import { useState, useEffect } from 'react';
 import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks/redux';
 import CitiesList from '../../components/cities-list/cities-list';
-import SortingOptions from '../../components/sorting-options/sorting-options';
-import { useSortingOffers } from '../../hooks/sorting';
 import { cities } from '../../const';
 import Header from '../../components/header/header';
-import { getOffers } from '../../store/offers/selectors';
+import { getOffers, getSortingOptions, } from '../../store/offers/selectors';
 import { getCurrentCity } from '../../store/city/selectors';
-import { getSortOptions } from '../../store/offers/selectors';
 import MainEmpty from '../../components/main-empty/main-empty';
+import SortingList from '../../components/sorting-list/sorting-list';
 
 function MainScreen(): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
@@ -22,21 +20,28 @@ function MainScreen(): JSX.Element {
   const offers: Offers = useAppSelector(getOffers);
   const city: string = useAppSelector(getCurrentCity);
 
-  const currenSorting = useAppSelector(getSortOptions);
+  const sortOption = useAppSelector(getSortingOptions);
 
   const onListItemHover = (selectedOfferId: number | undefined) => {
     const selectedOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === selectedOfferId);
     setSelectedPoint(selectedOffer);
   };
 
-  const getCurrentOffers = () => {
-    const cityOffers = offers.filter((offer: Offer) => offer.city.name === city);
+  const getCurrentOffers = (type: 'price' | 'rating', order: 'asc' | 'desc') => {
+    const cityOffers = offers.filter((offer: Offer) => offer.city.name === city)
+      .sort((a, b) => {
+        if (order === 'asc') {
+          return a[type] - b[type];
+        } else {
+          return b[type] - a[type];
+        }
+      });
     setCurrentOffers(cityOffers);
   };
 
   useEffect(() => {
-    getCurrentOffers();
-  }, [city, currenSorting]);
+    getCurrentOffers(sortOption.type, sortOption.order);
+  }, [city, sortOption]);
 
   return (
     <div className="page page--gray page--main">
@@ -62,8 +67,13 @@ function MainScreen(): JSX.Element {
                     currentOffers.length === 1 ? 'place' : 'places'
                   } to stay in ${city}`}
                 </b>
-                <SortingOptions currenSorting={currenSorting}/>
-                {<CardsList offers={useSortingOffers(currentOffers, currenSorting)} onListItemHover={onListItemHover} />}
+                {<SortingList />}
+                {
+                  <CardsList
+                    offers={currentOffers}
+                    onListItemHover={onListItemHover}
+                  />
+                }
               </section>
               <div className="cities__right-section">
                 <section className="cities__map map">

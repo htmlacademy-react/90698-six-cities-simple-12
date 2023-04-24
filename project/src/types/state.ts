@@ -2,8 +2,8 @@ import {store} from '../store/index';
 import { AuthorizationStatus } from '../const';
 import { Offers, Offer } from './offers';
 import { UserInfo } from './authorization';
-import { Sort } from './sorting';
 import { Comments } from './comments';
+import { SortingOptions } from './sorting';
 
 export type UserData = {
     userInfo: Omit<UserInfo, 'token'> | undefined;
@@ -18,8 +18,7 @@ export type OffersData = {
     nearbyOffers: Offers;
     areNearbyOffersLoading: boolean;
     areOffersLoading: boolean;
-    isOpenSort: boolean;
-    sorting: Sort;
+    sortingOptions: SortingOptions;
     error: boolean;
   };
 
