@@ -34,7 +34,7 @@ function PropertyScreen(): JSX.Element {
       dispatch(fetchNearbyOffersAction(id));
       dispatch(fetchCommentsAction(id));
     }
-  }, [id]);
+  }, [id, dispatch]);
 
   if (isSingleOfferLoading || areNearbyOffersLoading || areCommentsLoading) {
     return <Loading />;

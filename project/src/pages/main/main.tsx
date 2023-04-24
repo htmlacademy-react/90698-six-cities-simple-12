@@ -24,10 +24,6 @@ function MainScreen(): JSX.Element {
 
   const currenSorting = useAppSelector(getSortOptions);
 
-  useEffect(() => {
-    getCurrentOffers();
-  }, [city, currenSorting]);
-
   const onListItemHover = (selectedOfferId: number | undefined) => {
     const selectedOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === selectedOfferId);
     setSelectedPoint(selectedOffer);
@@ -37,6 +33,10 @@ function MainScreen(): JSX.Element {
     const cityOffers = offers.filter((offer: Offer) => offer.city.name === city);
     setCurrentOffers(cityOffers);
   };
+
+  useEffect(() => {
+    getCurrentOffers();
+  }, [city, currenSorting]);
 
   return (
     <div className="page page--gray page--main">
