@@ -1,44 +1,48 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { Offer, Offers } from '../../types/offers';
-import { Reviews } from '../../types/reviews';
-import SendComment from '../../components/send-comment/sendComment';
-import ReviewsList from '../../components/reviews-list/reviewsList';
+import Loading from '../loading/loading';
+import NotFoundScreen from '../not-found-screen/not-found-screen';
+import { AuthorizationStatus } from '../../const';
+import SendComment from '../../components/send-comment/send-comment';
+import CommentsList from '../../components/comments-list/comments-list';
 import Map from '../../components/map/map';
-import ListOffersNearby from '../../components/list-offers-nearby/listOffersNearby';
-import { useAppSelector } from '../../hooks/redux';
+import ListOffersNearby from '../../components/list-offers-nearby/list-offers-nearby';
+import { useAppSelector, useAppDispatch } from '../../hooks/redux';
 import Header from '../../components/header/header';
-import { getOffers } from '../../store/offers/selectors';
+import { getNearbyOffers, getNearbyOffersLoadingStatus, getSingleOffer, getSingleOfferErrorStatus, getSingleOfferLoadingStatus } from '../../store/offers/selectors';
+import { getComments, getCommentsLoadingStatus } from '../../store/comments/selectors';
+import { getAuthorizationStatus } from '../../store/authorization/selectors';
+import { fetchCommentsAction, fetchNearbyOffersAction, fetchSingleOfferAction } from '../../store/asyncActions';
 
-type RoomProps = {
-  reviews: Reviews;
-};
-
-function PropertyScreen({ reviews }: RoomProps): JSX.Element {
+function PropertyScreen(): JSX.Element {
   const { id } = useParams();
 
-  const [place, setPlace] = useState<Offer>();
-  const [placeReviews, setPlaceReviews] = useState<Reviews>([]);
-  const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
-    undefined
-  );
-  const [nearbyPlaces, setNearbyPlaces] = useState<Offers>([]);
-  const offers = useAppSelector(getOffers);
+  const dispatch = useAppDispatch();
+  const offer = useAppSelector(getSingleOffer);
+  const nearbyOffers = useAppSelector(getNearbyOffers);
+  const comments = useAppSelector(getComments);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
 
-  const onListItemHover = (listItemName: string | undefined) => {
-    setSelectedPoint(offers.find((offer: Offer) => offer.title === listItemName));
-  };
+  const isSingleOfferLoading = useAppSelector(getSingleOfferLoadingStatus);
+  const areNearbyOffersLoading = useAppSelector(getNearbyOffersLoadingStatus);
+  const areCommentsLoading = useAppSelector(getCommentsLoadingStatus);
+  const singleOfferErrorStatus = useAppSelector(getSingleOfferErrorStatus);
 
   useEffect(() => {
-    const currentPlace = offers.filter((offer) => offer.id === Number(id))[0];
-    setPlace(currentPlace);
+    if (id) {
+      dispatch(fetchSingleOfferAction(id));
+      dispatch(fetchNearbyOffersAction(id));
+      dispatch(fetchCommentsAction(id));
+    }
+  }, [id, dispatch]);
 
-    const currentReviews = reviews.filter((review) => review.id === Number(id));
-    setPlaceReviews(currentReviews);
+  if (isSingleOfferLoading || areNearbyOffersLoading || areCommentsLoading) {
+    return <Loading />;
+  }
 
-    const nearbyOffers = offers.filter((offer: Offer) => offer.id !== Number(id) && offer.city.name === currentPlace.city.name);
-    setNearbyPlaces(nearbyOffers);
-  }, [id, offers, reviews]);
+  if (singleOfferErrorStatus) {
+    return <NotFoundScreen />;
+  }
 
   return (
     <div className="page">
@@ -48,28 +52,28 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
 
       <Header />
 
-      {place && placeReviews && (
+      {offer && (
         <main className="page__main page__main--property">
           <section className="property">
             <div className="property__gallery-container container">
               <div className="property__gallery">
-                {place.images.map((image) => (
+                {offer.images.map((image) => (
                   <div className="property__image-wrapper" key={image}>
-                    <img className="property__image" src={image} alt={place.title} />
+                    <img className="property__image" src={image} alt={offer.title} />
                   </div>
                 ))}
               </div>
             </div>
             <div className="property__container container">
               <div className="property__wrapper">
-                {place.isPremium && (
+                {offer.isPremium && (
                   <div className="property__mark">
                     <span>Premium</span>
                   </div>
                 )}
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
-                    {place.title}
+                    {offer.title}
                   </h1>
                 </div>
                 <div className="property__rating rating">
@@ -81,23 +85,23 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
                 </div>
                 <ul className="property__features">
                   <li className="property__feature property__feature--entire">
-                    {place.type}
+                    {offer.type}
                   </li>
                   <li className="property__feature property__feature--bedrooms">
-                    {place.bedrooms} Bedrooms
+                    {offer.bedrooms} Bedrooms
                   </li>
                   <li className="property__feature property__feature--adults">
-                  Max {place.maxAdults} adults
+                  Max {offer.maxAdults} adults
                   </li>
                 </ul>
                 <div className="property__price">
-                  <b className="property__price-value">&euro;{place.price}</b>
+                  <b className="property__price-value">&euro;{offer.price}</b>
                   <span className="property__price-text">&nbsp;night</span>
                 </div>
                 <div className="property__inside">
                   <h2 className="property__inside-title">What&apos;s inside</h2>
                   <ul className="property__inside-list">
-                    {place.goods.map((item) => (
+                    {offer.goods.map((item) => (
                       <li className="property__inside-item" key={item}>
                         {item}
                       </li>
@@ -107,37 +111,37 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
                 <div className="property__host">
                   <h2 className="property__host-title">Meet the host</h2>
                   <div className="property__host-user user">
-                    <div className={`property__avatar-wrapper ${place.host.isPro ? 'property__avatar-wrapper--pro' : ''} user__avatar-wrapper`} >
-                      <img className="property__avatar user__avatar" src={place.host.avatarUrl} width="74" height="74" alt={place.host.name} />
+                    <div className={`property__avatar-wrapper ${offer.host.isPro ? 'property__avatar-wrapper--pro' : ''} user__avatar-wrapper`} >
+                      <img className="property__avatar user__avatar" src={offer.host.avatarUrl} width="74" height="74" alt={offer.host.name} />
                     </div>
                     <span className="property__user-name">
-                      {place.host.name}
+                      {offer.host.name}
                     </span>
-                    {place.host.isPro && (
+                    {offer.host.isPro && (
                       <span className="property__user-status">
                     Pro
                       </span>
                     )}
                   </div>
                   <div className="property__description">
-                    <p className="property__text" key={place.description.slice(0, 10)}>
-                      {place.description}
+                    <p className="property__text" key={offer.description.slice(0, 10)}>
+                      {offer.description}
                     </p>
                   </div>
                 </div>
                 <section className="property__reviews reviews">
-                  <h2 className="reviews__title">Reviews &middot; {' '} <span className="reviews__amount">{placeReviews.length}</span></h2>
-                  {<ReviewsList reviews={placeReviews} />}
-                  {<SendComment />}
+                  <h2 className="reviews__title">Reviews &middot; {' '} <span className="reviews__amount">{comments.length}</span></h2>
+                  {<CommentsList comments={comments} />}
+                  {authorizationStatus === AuthorizationStatus.Auth && <SendComment hotelId={offer.id} />}
                 </section>
               </div>
             </div>
             <section className="property__map map">
-              {offers && (
+              {nearbyOffers.length && (
                 <Map
-                  city={offers[0].city}
-                  offers={offers.filter((offer: Offer) => offer.title !== place.title)}
-                  selectedPoint={selectedPoint}
+                  city={offer.city}
+                  offers={[...nearbyOffers, offer]}
+                  selectedPoint={offer}
                 />
               )}
             </section>
@@ -145,11 +149,10 @@ function PropertyScreen({ reviews }: RoomProps): JSX.Element {
           <div className="container">
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
-              {nearbyPlaces.length &&
+              {nearbyOffers.length &&
                 (
                   <ListOffersNearby
-                    offers={nearbyPlaces}
-                    onListItemHover={onListItemHover}
+                    nearbyOffers={nearbyOffers}
                   />
                 )}
             </section>

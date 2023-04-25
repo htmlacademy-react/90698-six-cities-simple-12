@@ -3,19 +3,14 @@ import { AppRoute } from '../../const';
 import MainScreen from '../../pages/main/main';
 import LoginScreen from '../../pages/login/login';
 import PropertyScreen from '../../pages/room/room';
-import NotFoundScreen from '../../pages/not-found-screen/notFoundScreen';
-import { Reviews } from '../../types/reviews';
+import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import { useAppSelector } from '../../hooks/redux';
 import LoadingScreen from '../../pages/loading/loading';
-import HistoryRouter from '../history-router/historyRouter';
+import HistoryRouter from '../history-router/history-router';
 import browserHistory from '../../services/browser-history';
 import { getOffersLoadingStatus } from '../../store/offers/selectors';
 
-type AppScreenProps = {
-  reviews: Reviews;
-}
-
-function App({reviews}: AppScreenProps): JSX.Element {
+function App(): JSX.Element {
   const areOffersLoading = useAppSelector(getOffersLoadingStatus);
 
   if (areOffersLoading) {
@@ -23,6 +18,7 @@ function App({reviews}: AppScreenProps): JSX.Element {
   }
 
   return (
+
     <HistoryRouter history={browserHistory}>
       <Routes>
         <Route
@@ -35,7 +31,7 @@ function App({reviews}: AppScreenProps): JSX.Element {
         />
         <Route
           path={AppRoute.Room}
-          element={<PropertyScreen reviews={reviews} />}
+          element={<PropertyScreen />}
         />
         <Route
           path="*"

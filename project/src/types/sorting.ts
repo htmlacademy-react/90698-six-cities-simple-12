@@ -1,4 +1,5 @@
-export type Sort =
-  {label: string};
-
-export type Sorting = Sort[];
+export type SortingOptions = {
+  name: string;
+  type: 'price' | 'rating';
+  order: 'asc' | 'desc';
+};
