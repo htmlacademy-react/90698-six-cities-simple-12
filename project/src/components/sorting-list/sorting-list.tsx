@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAppSelector } from '../../hooks/redux';
 import { getSortingOptions } from '../../store/offers/selectors';
 import { SortingOptions } from '../../types/sorting';
 import Sorting from '../sorting/sorting';
 
-const sortItems: SortingOptions[] = [
+export const sortItems: SortingOptions[] = [
   { name: 'Popular', type: 'rating', order: 'asc' },
   { name: 'Price: low to high', type: 'price', order: 'asc' },
   { name: 'Price: high to low', type: 'price', order: 'desc' },
@@ -19,17 +19,6 @@ function SortingList() {
   const toggleVisiblePopup = () => {
     setVisiblePopup(!visiblePopup);
   };
-
-  const handleOutsideClick = (event: MouseEvent) => {
-    if (sortPopup.current && !sortPopup.current.contains(event.target as Node)) {
-      setVisiblePopup(false);
-    }
-  };
-
-  useEffect(() => {
-    document.body.addEventListener('click', handleOutsideClick);
-    return () => document.body.removeEventListener('click', handleOutsideClick);
-  }, []);
 
   return (
     <form className="places__sorting" action="#" method="get">
@@ -51,7 +40,7 @@ function SortingList() {
         }`}
       >
         {sortItems.map((sortItem) => (
-          <Sorting {...sortItem} key={sortItem.name} />
+          <Sorting {...sortItem} key={sortItem.name} toggleVisiblePopup={toggleVisiblePopup}/>
         ))}
       </ul>
     </form>

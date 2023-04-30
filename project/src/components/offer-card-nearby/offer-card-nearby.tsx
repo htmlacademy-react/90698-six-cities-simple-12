@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { Offer } from '../../types/offers';
+import { currrentRating } from '../../utils/utils';
 
 type OfferCardNearbyProps = {
   nearbyOffer: Offer;
@@ -36,7 +37,7 @@ function OfferCardNearby({nearbyOffer}: OfferCardNearbyProps) {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: '80%' }}></span>
+            <span style={{ width: currrentRating(nearbyOffer.rating) }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>

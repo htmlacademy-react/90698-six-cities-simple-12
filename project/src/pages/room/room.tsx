@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
-import Loading from '../loading/loading';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import { AuthorizationStatus } from '../../const';
 import SendComment from '../../components/send-comment/send-comment';
@@ -13,6 +12,8 @@ import { getNearbyOffers, getNearbyOffersLoadingStatus, getSingleOffer, getSingl
 import { getComments, getCommentsLoadingStatus } from '../../store/comments/selectors';
 import { getAuthorizationStatus } from '../../store/authorization/selectors';
 import { fetchCommentsAction, fetchNearbyOffersAction, fetchSingleOfferAction } from '../../store/asyncActions';
+import { currrentRating } from '../../utils/utils';
+import Loading from '../loading/loading';
 
 function PropertyScreen(): JSX.Element {
   const { id } = useParams();
@@ -78,10 +79,10 @@ function PropertyScreen(): JSX.Element {
                 </div>
                 <div className="property__rating rating">
                   <div className="property__stars rating__stars">
-                    <span style={{ width: '80%' }}></span>
+                    <span style={{ width: currrentRating(offer.rating) }}></span>
                     <span className="visually-hidden">Rating</span>
                   </div>
-                  <span className="property__rating-value rating__value">4.8</span>
+                  <span className="property__rating-value rating__value">{offer.rating}</span>
                 </div>
                 <ul className="property__features">
                   <li className="property__feature property__feature--entire">

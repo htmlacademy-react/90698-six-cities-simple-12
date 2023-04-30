@@ -4,7 +4,7 @@ import { OffersData } from '../../types/state';
 import { fetchNearbyOffersAction, fetchOffersAction, fetchSingleOfferAction } from '../asyncActions';
 import { SortingOptions } from '../../types/sorting';
 
-const initialState: OffersData = {
+export const initialState: OffersData = {
   offers: [],
   sortingOptions: {
     name: 'popular',

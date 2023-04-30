@@ -1,17 +1,24 @@
 import React from 'react';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { setSortingOptions } from '../../store/offers/offers';
 import { SortingOptions } from '../../types/sorting';
+import { getSortingOptions } from '../../store/offers/selectors';
 
-function Sorting({ name, type, order }: SortingOptions) {
+type SortingProps = {
+  toggleVisiblePopup: () => void;
+} & SortingOptions;
+
+function Sorting({ name, type, order, toggleVisiblePopup }: SortingProps) {
   const dispatch = useAppDispatch();
+  const sortOption = useAppSelector(getSortingOptions);
 
   const onClickSetSortOption = () => {
     dispatch(setSortingOptions({name, type, order}));
+    toggleVisiblePopup();
   };
 
   return (
-    <li onClick={onClickSetSortOption} className="places__option places__option--active" tabIndex={0}>
+    <li onClick={onClickSetSortOption} className={`places__option ${sortOption.name === name ? 'places__option--active' : ''}`} tabIndex={0}>
       {name}
     </li>
   );
