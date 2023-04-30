@@ -1,13 +1,15 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import Rating from '../rating/rating';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { postCommentAction } from '../../store/asyncActions';
+import { getPostLoadingStatus } from '../../store/comments/selectors';
 
 type SendCommentProps = {
   hotelId: number;
 };
 
 function SendComment({ hotelId }: SendCommentProps) {
+  const isCommentBeingPosted = useAppSelector(getPostLoadingStatus);
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     rating: 0,
@@ -15,7 +17,7 @@ function SendComment({ hotelId }: SendCommentProps) {
     date: new Date(),
   });
 
-  const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
+  const [submitButtonDisabled, setSubmitButtonDisabled] = useState<boolean>(true);
 
   const handleInput = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = evt.target;
@@ -65,7 +67,7 @@ function SendComment({ hotelId }: SendCommentProps) {
       </label>
       <div className="reviews__rating-form form__rating">
         {[5, 4, 3, 2, 1].map((star) => (
-          <Rating value={star} onChange={handleInput} key={star} />
+          <Rating value={star} onChange={handleInput} key={star} rating={formData.rating} postLoadingStatus={isCommentBeingPosted} />
         ))}
       </div>
       <textarea
@@ -75,6 +77,7 @@ function SendComment({ hotelId }: SendCommentProps) {
         placeholder="Tell how was your stay, what you like and what can be improved"
         value={formData.review}
         onChange={handleInput}
+        disabled={isCommentBeingPosted}
       >
       </textarea>
       <div className="reviews__button-wrapper">
