@@ -1,3 +1,4 @@
+import React from 'react';
 import { Offers, Offer } from '../../types/offers';
 import CardsList from '../../components/cards-list/cards-list';
 import { useState, useEffect } from 'react';
@@ -38,10 +39,9 @@ function MainScreen(): JSX.Element {
       });
     setCurrentOffers(cityOffers);
   };
-
   useEffect(() => {
     getCurrentOffers(sortOption.type, sortOption.order);
-  }, [city, sortOption]);
+  }, [city, getCurrentOffers, sortOption]);
 
   return (
     <div className="page page--gray page--main">
@@ -95,4 +95,4 @@ function MainScreen(): JSX.Element {
   );
 }
 
-export default MainScreen;
+export default React.memo(MainScreen);

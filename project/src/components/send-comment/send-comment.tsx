@@ -48,7 +48,7 @@ function SendComment({ hotelId }: SendCommentProps) {
   };
 
   useEffect(() => {
-    if (formData.rating !== 0 && formData.review.length >= 50) {
+    if (formData.rating !== 0 && formData.review.length >= 50 && formData.review.length < 301) {
       setSubmitButtonDisabled(false);
     } else {
       setSubmitButtonDisabled(true);
