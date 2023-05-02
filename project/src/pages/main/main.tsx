@@ -1,7 +1,7 @@
 import React from 'react';
 import { Offers, Offer } from '../../types/offers';
 import CardsList from '../../components/cards-list/cards-list';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Map from '../../components/map/map';
 import { useAppSelector } from '../../hooks/redux';
 import CitiesList from '../../components/cities-list/cities-list';
@@ -11,34 +11,28 @@ import { getOffers, getSortingOptions, } from '../../store/offers/selectors';
 import { getCurrentCity } from '../../store/city/selectors';
 import MainEmpty from '../../components/main-empty/main-empty';
 import SortingList from '../../components/sorting-list/sorting-list';
+import { createSelector } from 'reselect';
 
+export const getSortedOffers = createSelector(
+  getOffers,
+  getSortingOptions,
+  getCurrentCity,
+  (offers, { order, type }, city) => offers
+    .filter((offer) => offer.city.name === city)
+    .sort((a, b) => (order === 'asc') ? a[type] - b[type] : b[type] - a[type] )
+);
 function MainScreen(): JSX.Element {
   const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
     undefined
   );
-  const [currentOffers, setCurrentOffers] = useState<Offers>([]);
-  const offers: Offers = useAppSelector(getOffers);
+  const currentOffers: Offers = useAppSelector(getSortedOffers);
   const city: string = useAppSelector(getCurrentCity);
-  const sortOption = useAppSelector(getSortingOptions);
+
   const onListItemHover = (selectedOfferId: number | undefined) => {
-    const selectedOffer: Offer | undefined = offers.find((offer: Offer) => offer.id === selectedOfferId);
+    const selectedOffer = currentOffers.find((offer) => offer.id === selectedOfferId);
     setSelectedPoint(selectedOffer);
   };
-  const getCurrentOffers = (type: 'price' | 'rating', order: 'asc' | 'desc') => {
-    const cityOffers = offers.filter((offer: Offer) => offer.city.name === city)
-      .sort((a, b) => {
-        if (order === 'asc') {
-          return a[type] - b[type];
-        } else {
-          return b[type] - a[type];
-        }
-      });
-    setCurrentOffers(cityOffers);
-  };
 
-  useEffect(() => {
-    getCurrentOffers(sortOption.type, sortOption.order);
-  }, [city, getCurrentOffers, sortOption]);
   return (
     <div className="page page--gray page--main">
       <div style={{ display: 'none' }}>
