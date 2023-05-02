@@ -1,12 +1,27 @@
-function NotFoundScreen(): JSX.Element {
+import {Link} from 'react-router-dom';
+import { AppRoute } from '../../const';
+import Logo from '../../components/logo/logo';
+
+function NotFoundScreen() {
   return (
-    <main className="page__main page__main--page-not-found">
-      <section className="page-not-found">
-        <h1 className="page-not-found__title">404 Page not found</h1>
-        <a className="page-not-found__link" href="/"><span>Вернутся на главную страницу</span></a>
-      </section>
-    </main>
+    <div className="room">
+      <div className="not-found__container">
+        <div className="not-found__logo-wrapper">
+          <Logo />
+        </div>
+        <div className="property__mark">
+          <span>404</span>
+        </div>
+        <div className="property__name-wrapper">
+          <h1 className="property__name">
+            We are sorry the page you are looking for does not exist.
+          </h1>
+        </div>
+        <Link to={AppRoute.Main} className="property__inside-title">
+          Return to the main page.
+        </Link>
+      </div>
+    </div>
   );
 }
-
 export default NotFoundScreen;

@@ -37,12 +37,12 @@ function PropertyScreen(): JSX.Element {
     }
   }, [id, dispatch]);
 
-  if (isSingleOfferLoading || areNearbyOffersLoading || areCommentsLoading) {
-    return <Loading />;
-  }
-
   if (singleOfferErrorStatus) {
     return <NotFoundScreen />;
+  }
+
+  if (isSingleOfferLoading || areNearbyOffersLoading || areCommentsLoading) {
+    return <Loading />;
   }
 
   return (

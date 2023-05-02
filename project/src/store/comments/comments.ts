@@ -20,14 +20,14 @@ export const commentsData = createSlice({
         state.areCommentsLoading = true;
       })
       .addCase(fetchCommentsAction.fulfilled, (state, action: PayloadAction<Comments>) => {
-        state.comments = action.payload.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+        state.comments = action.payload.sort((a, b) => b.date.localeCompare(a.date));
         state.areCommentsLoading = false;
       })
       .addCase(postCommentAction.pending, (state) => {
         state.isCommentBeingPosted = true;
       })
       .addCase(postCommentAction.fulfilled, (state, action: PayloadAction<Comments>) => {
-        state.comments = action.payload.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+        state.comments = action.payload.sort((a, b) => b.date.localeCompare(a.date));
         state.isCommentBeingPosted = false;
       });
   },
